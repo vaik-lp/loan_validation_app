@@ -6,6 +6,10 @@ from sqlalchemy import text
 from sqlalchemy import create_engine
 import pickle
 from xgboost import XGBClassifier
+import requests
+
+
+REST_URL = "http://localhost:8000/"
 
 
 
@@ -20,9 +24,56 @@ def fCreateDataBase(url_db):
     
 
 def fReloadPage():
+    """Gestion et mapping des données à transmettre entre pages
+
+    Args:
+        df (DataFrame): Données des dossiers en cours d'utilisation/manipulation
+
+    Returns:
+        DataFrame: Données filtrées selon l'utilsiation des widgets 
+    """    
     if len(st.session_state.keys()) > 0:
         #print(st.session_state)
         st.experimental_set_query_params(**st.session_state)
+        
+
+def fRender_message_score():
+    """Appel au web service de simulation du score de risque
+    """    
+    fReloadPage()
+    
+    if st.session_state.w_genre == "Femme": ws_genre = 0
+    else: ws_genre = 1
+
+    if st.session_state.w_ecart_adr == "Non": ws_ecart_adr = 0
+    else: ws_ecart_adr = 1
+
+    if st.session_state.w_activite_pro == "Non": ws_activite_pro = 0
+    else: ws_activite_pro = 1
+
+    if st.session_state.w_scol_univ == "Non": ws_scol_univ = 0
+    else: ws_scol_univ = 1
+    
+    params = {"genre": ws_genre,
+              "eval_region": st.session_state.w_eval_reg,
+              "ecart_adr": ws_ecart_adr,
+              "activite_pro": ws_activite_pro, 
+              "scol_univ": ws_scol_univ, 
+              "risque_all_loan": st.session_state.w_risque_all_loan, 
+              "current_credit_cb": st.session_state.w_current_credit_cb, 
+              "nb_mens" : st.session_state.w_nb_mens, 
+              "nb_cb": st.session_state.w_nb_cb}
+    print(params)
+    
+    resp = requests.get(REST_URL + "risk_simulation", params=params).json()
+    
+    print(resp)
+    if resp["status"] == "success":
+        st.success(f"La nouvelle simulation, en ligne, donne un risque de défaut de paiement de **{resp['score_simulation']}%**.")
+    else:
+        st.error(f"{resp['message']}")
+    
+
 
 @st.cache_resource
 def fGetRessources(path_file):
@@ -152,6 +203,9 @@ col4, col5 = st.columns(2)
 # création bouton
 with col4:
     st.button(":arrows_counterclockwise: Lancer la simulation", key="calc_simul")
+    resultat = st.button(":arrows_counterclockwise: Lancer la simulation en ligne")
+    if resultat:
+        fRender_message_score()
 
 with col5:
     # Reinitialisation des valeurs par défaut
