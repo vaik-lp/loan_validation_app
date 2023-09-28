@@ -576,7 +576,7 @@ def Maintenance(ratio, campagne):
             
 def main():
     
-    if len( sys.argv ) > 2:
+    if len( sys.argv ) != 2:
         print( "Loan Validation App" )
         print( "\tusage: python3 maintenance_xgboost.py intValue" )
         print( "Args => 1 for Exploration, 2 for Validation and 3 for Maintenance." )
