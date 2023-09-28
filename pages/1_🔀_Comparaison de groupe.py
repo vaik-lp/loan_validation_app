@@ -20,6 +20,20 @@ from sklearn.model_selection import KFold, cross_validate, cross_val_score, trai
 
 @st.cache_data
 def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
+    """
+    Fonction permettant la lecture d'un fichier au format csv encodé en utf8 contenant un DataFrame avec ou sans précision des types de données
+
+    Args:
+        path (str): path complet du fichier.
+        file (str): nom du fichier sans extention, l'extention doit être csv
+        use_dict (bool, optional): utilisation d'un dictionnaire pour les type des colonnes. Le dictionnaire doit avoir le même nom que le fichier avec une extention dict. Defaults to False.
+        encoding (str): Encodage du fichier. Defaults to 'utf8'.
+        sep (char): Séparateur de coonne. Defaults to ';'.
+        
+
+    Returns:
+        DataFrame: Données chargées
+    """
     if use_dict:
         path_dict = os.path.join(path, f'{file}.dict')
         if os.path.exists(path_dict):
@@ -54,32 +68,77 @@ def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
 
 @st.cache_data
 def fReadBinaryDataFrame(path_file):
+    """Chargement binaire et mise en cache des ressources pour ne les charger qu'une seule fois
+
+    Args:
+        path_file (string): chemin d'accès de la ressources à charger
+
+    Returns:
+        object: ressources chargées, elle peut être de différentes natures
+    """    
     if os.path.exists(path_file):
         return pd.read_pickle(open(path_file, "rb"))
 
 
 def fCreateDataBase(url_db):
+    """Chargement et mise en cache de la base de donnée popur ne la charger qu'une seule fois
+
+    Args:
+        url_db (string): url d'accès à la base de données. 
+    """    
     global engine
     engine = create_engine(url_db)
 
 
 def fReloadPage():
+    """Gestion et mapping des données à transmettre entre pages
+
+    Args:
+        df (DataFrame): Données des dossiers en cours d'utilisation/manipulation
+
+    Returns:
+        DataFrame: Données filtrées selon l'utilsiation des widgets 
+    """    
     if len(st.session_state.keys()) > 0:
         st.experimental_set_query_params(**st.session_state)
 
 
 @st.cache_resource
 def fGetRessources(path_file):
+    """Chargement et mise en cache des ressources pour ne les charger qu'une seule fois
+
+    Args:
+        path_file (string): chemin d'accès de la ressources à charger
+
+    Returns:
+        object: ressources chargées, elle peut être de différentes natures
+    """    
     if os.path.exists(path_file):
         return pickle.load(open(path_file, "rb"))
 
 
 def st_shap(plot, height=None):
+    """Affichage des graphique SHAP
+
+    Args:
+        plot (fig): Figure Mathplotlib
+        height (int, optional): Hauteur d'image spécifique souhaitée. Defaults to None.
+    """    
     shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
     components.html(shap_html, height=height)
 
 
 def custom_scoring(y_true, y_pred, beta=None):
+    """Scoring spécifique pour influer sur l'importance d'une classe d'erreur spécifique
+    
+    Args:
+        y_true (array of int): Classification réelle
+        y_pred (array of int): Classification prédite
+        beta (float, optional): Paramètre permettant de réduirre ou de privilégier une classe d'erreur par rapport à une autre. Defaults to None.
+
+    Returns:
+        float: Scoring de la pertience entre les données réelles et celles prédites 
+    """    
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred, labels=[0,1]).ravel()
     precision = tp / (tp + fp)
     recall = tp / (tp + fn)
@@ -96,13 +155,36 @@ def custom_scoring(y_true, y_pred, beta=None):
 
 
 def custom_scoring_min_fn(y_true, y_pred):
+    """Scoring spécifique pour reduire ne nombre de faux négatif 
+
+    Args:
+        y_true (array of int): Classification réelle
+        y_pred (array of int): Classification prédite
+
+    Returns:
+        float: Scoring de la pertience entre les données réelles et celles prédites 
+    """    
+    # Minimiser les accords de prêt qui seront éventuellement en défaut de paiement
     return custom_scoring(y_true, y_pred, beta=2)
 
-
+# Instanciation du Scorer
 custom_scorer = make_scorer(custom_scoring_min_fn, greater_is_better=True, needs_proba=False)
 
 
 def fSplitDataSetForModelingTesting(df, target_label='TARGET', train_target_values=[0, 1], ratio_sampling=1.):
+    """Découpage du jeux d'essais pour les test de modélisation tout en reduisant la taille du jeux d'essai de manière cohérante
+
+    Args:
+        df (DataFrame): Jeu d'essais
+        target_label (str, optional): Nom de la colonne comportant les target. Defaults to 'TARGET'.
+        train_target_values (list, optional): Liste des valeurs possible pour les individues d'entraienement. Defaults to [0, 1].
+        ratio_sampling (float, optional): Taux de fractionnement des individus du jeux d'essais. Defaults to 1..
+
+    Returns:
+        Datafraime: Jeu de données d'entrainement
+        Series: Target du jeux d'entrainement
+        DataFrame: Jeu de données de test
+    """    
     train = df.loc[df[target_label].isin(train_target_values)].copy()
     target = train[target_label]
     train.drop(columns=target_label, inplace=True)
@@ -129,9 +211,7 @@ def fSplitDataSetForModelingTesting(df, target_label='TARGET', train_target_valu
     return train, target, test
 
 
-if 'engine' not in globals(): 
-    fCreateDataBase("sqlite:///loan_validation.db")
-
+# Paramétrage du menu par défaut de streamlit
 st.set_page_config(
     page_title="Loan Validation",
     page_icon=":white_check_mark:",
@@ -143,6 +223,11 @@ st.set_page_config(
 )
 
 
+#Chargement et constitution des données de l'application
+if 'engine' not in globals(): 
+    fCreateDataBase("sqlite:///loan_validation.db")
+
+# Récupération des données du dossier en cours d'étude
 df_current = pd.read_sql_query(sql=f"select * from prospects where ID={st.session_state.id};", con=engine)
 _, genre, eval_reg, ecart_adr, activite_pro, scol_univ, risque_all_loan, current_credit_cb, nb_mens, nb_cb, risque_calc, _ = df_current.iloc[0]
 
@@ -159,12 +244,14 @@ if scol_univ == 0: scol_univ = "Non"
 else: scol_univ = "Oui"
 
 
+# Gestion des variables de session
 if "wc_groupe" not in st.session_state:
     st.session_state.wc_groupe = 100
 else:
     if type(st.session_state.wc_groupe) is list:
         st.session_state.wc_groupe = int(st.session_state.wc_groupe[0])
 
+# Menu de gestion des filtres    
 st.sidebar.slider("**Nombre de voisins**", 1, 100, key="wc_groupe")
 
 
@@ -175,6 +262,7 @@ if st.sidebar.button("Réinitialisation des filtres."):
     st.experimental_rerun()
 
 
+# Affichage du cartouche d'entête
 st.title(":white_check_mark: Application de validation des prêts")
 st.header(f":twisted_rightwards_arrows: Les données du demandeur n° *{st.session_state.id}* par rapport aux demandes les plus proches")
 st.subheader(f"*Risque de défaut de paiement de {risque_calc:.0%}*")
@@ -223,10 +311,12 @@ target = df["TARGET"]
 df = df[list_of_best_features].rename(columns=dict_rename_features)
 df["Risque en %"] = target
 
+# Chargement du modele de calcul des plus proches voisins
 knn = fGetRessources(os.path.join("data", "cleaned", "knn_model.pkl"))
 
 df_voisins = pd.DataFrame([], columns=["Distances", "Voisins_idx"])
 
+# Récupération des plus proches voisins
 distances, voisins_idx = knn.kneighbors(df_current.iloc[:, 1:-2], n_neighbors=int(st.session_state.wc_groupe), return_distance=True)
 
 
@@ -250,12 +340,13 @@ st.divider()
     
     
 if file_choice == "Explicative":
+    # Affichage des valeurs axplicatives SHAP pour les voisins sélectionnés 
     shap_values = fGetRessources(os.path.join("data", "cleaned", "shap_values.pkl"))[...,1]
     
     st_shap(shap.plots.force(shap_values[df_voisins["Voisins_idx"].values]), 400)
 
 elif file_choice == "Comparative":
-    
+    # Affichage des radars pour comparer 2 aà 2 les valeurs du dossier vis-à-vis des voisins sélectionnés     
     df_wip = df.iloc[df_voisins["Voisins_idx"].values].copy()
     df_wip = pd.concat([df_current.set_index("ID").iloc[:, :-1], df_wip])
     for col in list(df_wip)[:-1]:
@@ -336,7 +427,7 @@ elif file_choice == "Comparative":
     
 
 elif file_choice == "Globale":
-
+    # Affichage d'un projection t-SNE du dossier par rapport aux voisins sélectionnés 
     df_tsne = fReadBinaryDataFrame(os.path.join("data", "cleaned", "tsne_data.pkl"))
         
     df_current_tsne = df_tsne.loc[[int(st.session_state.id)]]
