@@ -41,8 +41,7 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
     """    
     status = "success"
     message = ""
-    score_simulation = 999
-
+    
     
     try: 
         if int(genre) not in [0, 1]:
@@ -59,6 +58,7 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
             current_message = "La donnée ecart_adr doit être 0 ou 1."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
+            
         elif int(activite_pro) not in [0, 1]:
             current_message = "La donnée activite_pro doit être 0 ou 1."
             if message == "" : message = current_message 
@@ -74,10 +74,11 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(current_credit_cb) not in [0, 1]:
-            current_message = "La donnée current_credit_cb doit être 0 ou 1."
+        elif int(current_credit_cb) not in range(31):
+            current_message = "La donnée current_credit_cb doit être 0 ou 30."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
+            
         elif int(nb_mens) not in range(31):
             current_message = "La donnée nb_mens doit être entre 0 et 30."
             if message == "" : message = current_message 
@@ -98,7 +99,7 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
         
     except Exception as e: 
         status = "fail"
-        message = " | ".join([message, "Une erreur a été détectée !"])
-        score = [[0, 999]]
+        message = " ".join(["Une erreur a été détectée !", message])
+        score = [[0, 9.99]]
     
     return {"status": status, "score_simulation": int(np.round(score[0][1]*100, 0)), "message": message}
