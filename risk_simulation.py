@@ -99,6 +99,6 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
     except Exception as e: 
         status = "fail"
         message = " | ".join([message, "Une erreur a été détectée !"])
-        score = [[0, 0]]
+        score = [[0, 999]]
     
     return {"status": status, "score_simulation": int(np.round(score[0][1]*100, 0)), "message": message}
