@@ -24,7 +24,7 @@ def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
         
 
     Returns:
-        _type_: _description_
+        DataFrame: Données chargées
     """
     # Utilisation d'un dictionnaire pour préciser les types de données du fichier csv en lecture
     if use_dict:
