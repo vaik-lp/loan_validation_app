@@ -12,6 +12,21 @@ import matplotlib.pyplot as plt
 
 @st.cache_data
 def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
+    """
+    Fonction permettant la lecture d'un fichier au format csv encodé en utf8 contenant un DataFrame avec ou sans précision des types de données
+
+    Args:
+        path (str): path complet du fichier.
+        file (str): nom du fichier sans extention, l'extention doit être csv
+        use_dict (bool, optional): utilisation d'un dictionnaire pour les type des colonnes. Le dictionnaire doit avoir le même nom que le fichier avec une extention dict. Defaults to False.
+        encoding (str): Encodage du fichier. Defaults to 'utf8'.
+        sep (char): Séparateur de coonne. Defaults to ';'.
+        
+
+    Returns:
+        _type_: _description_
+    """
+    # Utilisation d'un dictionnaire pour préciser les types de données du fichier csv en lecture
     if use_dict:
         path_dict = os.path.join(path, f'{file}.dict')
         
@@ -32,6 +47,7 @@ def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
                     
     path_file = os.path.join(path, f'{file}.csv')
     
+    # Lecture des données
     if os.path.exists(path_file):
         if use_dict:
             df = pd.read_csv(path_file, sep=sep, encoding=encoding, dtype=liste_columns_type)
@@ -55,6 +71,15 @@ def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
 
 @st.cache_data
 def fGetScoresFromMLModel(df):
+    """calcul des scores d'un jeu de données avec le modele de ML sauvegardé
+
+    Args:
+        df (DataFrame): Dataset sans target
+
+    Returns:
+        DataFrame: dataframe comprenant le score de risque de non paiement des échéances deprêt
+    """    
+    # Chargement de modele de ML précédement calculé
     model = fGetRessources(os.path.join("data", "cleaned", "xgboost_model.pkl"))
 
     list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
@@ -62,6 +87,7 @@ def fGetScoresFromMLModel(df):
                          'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
                          'agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique']
 
+    # renomage des colonnes pour donner du sens aux utilisateurs 
     dict_rename_features = {'app_IS_MASCULIN': "Genre", 
                             'app_REGION_RATING_CLIENT': "Evaluation de la région d'habitation", 
                             'app_REG_CITY_NOT_WORK_CITY': "Ecart adresse pro/perso", 
@@ -79,6 +105,7 @@ def fGetScoresFromMLModel(df):
     df = df.loc[df['TARGET'] == -999, list_of_best_features].rename(columns=dict_rename_features).copy()
     idx_df = df.index
     
+    # Pédiction avec un score de probabilité (pas de classification)
     target_pred = model.predict_proba(df)[:, 1]
     
     # Submission dataframe
@@ -93,6 +120,14 @@ def fGetScoresFromMLModel(df):
 
 @st.cache_data
 def fCreateProspectDataFrame(df_clients, df_scors):
+    """
+    Création d'un DataFrame de prospect pour une utilisation dans le tableau de bord. 
+
+    Args:
+        df_clients (DataFrame): Données clients
+        df_scors (DataFrame): Scorring des prospects
+    """
+
     list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
                          'app_NAME_EDUCATION_TYPE_Higher education', 'agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum', 
                          'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
@@ -122,6 +157,7 @@ def fCreateProspectDataFrame(df_clients, df_scors):
     list_index_to_valide_loan = df_prospects.loc[df_prospects['Risque en %'] < 0.6].sample(frac=0.32).index
     df_prospects.loc[list_index_to_valide_loan,'Etat'] = [1.0] * len(list_index_to_valide_loan)
     
+    # By pass du rechargement de la table pour générer la couche de persistance entre les différentes pages et du statut du traitement des dossiers
     try:
         df_prospects.to_sql(name='prospects', con=engine, if_exists='fail', index=True, chunksize=1000)
     except Exception as e: 
@@ -129,6 +165,13 @@ def fCreateProspectDataFrame(df_clients, df_scors):
     
 
 def fReset_states(df_prospects, reset_id=True):
+    """
+    Réinitialistion des filtres des widgets
+
+    Args:
+        df_prospects (DataFrame): DataFrame des prostects pour récupérer les listes des valeurs initiales.
+        reset_id (bool, optional): Forcage pour réinitialiser le dossier client au dossier par défaut (premier dossier non traité). Defaults to True.
+    """    
     if "w_dossier_unique" not in st.session_state: st.session_state.w_dossier_unique = False
     if reset_id: st.session_state.id = df_prospects.loc[df_prospects["Etat"].isna()].index[0]
     st.session_state.w_genre = "Tous"
@@ -153,18 +196,40 @@ def fReset_states(df_prospects, reset_id=True):
 
 @st.cache_resource
 def fGetRessources(path_file):
+    """Chargement et mise en cache des ressources pour ne les charger qu'une seule fois
+
+    Args:
+        path_file (string): chemin d'accès de la ressources à charger
+
+    Returns:
+        object: ressources chargées, elle peut être de différentes natures
+    """    
     if os.path.exists(path_file):
         return pickle.load(open(path_file, "rb"))
 
 
 #@st.cache_resource
 def fCreateDataBase(url_db):
+    """Chargement et mise en cache de la base de donnée popur ne la charger qu'une seule fois
+
+    Args:
+        url_db (string): url d'accès à la base de données. 
+    """    
     global engine
     engine = create_engine(url_db)
 
 
 
 def fGetUrl(action, id):
+    """Construction de l'url pour réaliser des actions entre les pages en méthode GET
+
+    Args:
+        action (string): clé accociée aux actions à lancer
+        id (string): identifiant du dossier a propager entre les différentes pages de l'application
+
+    Returns:
+        url: url permettant de lancer les actions souhaitées, notamment la persistance de la validation ou du refus d'un dossier
+    """    
     url = f"./?id={id}&action={action}"
     for item in st.session_state.items():
         key, value = item
@@ -179,8 +244,16 @@ def fGetUrl(action, id):
 
         
 def fReloadPage(df):
+    """Gestion et mapping des données à transmettre entre pages
 
+    Args:
+        df (DataFrame): Données des dossiers en cours d'utilisation/manipulation
+
+    Returns:
+        DataFrame: Données filtrées selon l'utilsiation des widgets 
+    """    
     if len(st.session_state.keys()) > 0:
+        # Gestion différentes si on sélectionne un dossier unique ou si l'on travail sur une liste de dossier filtrés
         if st.session_state.w_dossier_unique:
             del st.session_state.w_nombre_prospects
             st.session_state.w_nombre_prospects = 1
@@ -246,6 +319,17 @@ def fReloadPage(df):
 
 
 def fPrintTable(df_table, seuil_risque_min, seuil_risque_max):
+    """Génération du tableau d'affichage des dossier en  cours de traitement
+
+    Args:
+        df_table (DataFrame): Données à afficher
+        seuil_risque_min (int): seuil minimum du risque intermédiaire pour affichage de la coloration dans le tableau
+        seuil_risque_max (_type_): seuil maximum du risque intermédiaire pour affichage de la coloration dans le tableau
+
+    Returns:
+        string: tableau en format html
+    """    
+    # Feuille de style du tableau
     css_table = """
     <style>
         td,
@@ -372,6 +456,10 @@ def fPrintTable(df_table, seuil_risque_min, seuil_risque_max):
 
 
 def main():
+    """
+    Affichage de la page d'accueil et du tableau de bord
+    """
+    # Paramétrage du menu par défaut de streamlit
     st.set_page_config(
         page_title="Loan Validation",
         page_icon=":white_check_mark:",
@@ -385,6 +473,8 @@ def main():
     )
 
     st.title(":white_check_mark: Application de validation des prêts")
+
+    #Chargement et constitution des données de l'application
     df_clients = fReadDataFrameFile(os.path.join("data", "cleaned"), 'features_03')
     df_scors = fGetScoresFromMLModel(df_clients)
 
@@ -395,9 +485,12 @@ def main():
         fCreateProspectDataFrame(df_clients, df_scors)
     
     df_prospects = pd.read_sql_query(sql=text("select * from prospects;"), con=engine)
+
+    # Activation de la gestion des multipage de streamlit
     input_params = st.experimental_get_query_params()
-    dossier_unique=False
     
+    # Gestion des variables de session
+    dossier_unique=False
     for item in input_params.items():
         key, value = item
         if key in ["w_genre", "w_ecart_adr", "w_activite_pro", "w_scol_univ", "w_current_credit_cb"]:
@@ -440,7 +533,7 @@ def main():
             st.session_state[key] = value
 
     df_wip = df_prospects.copy()
-
+    # Initialisation des données
     if ("id" not in st.session_state) | ("w_seuil_risque" not in st.session_state) | ("w_dossier_unique" not in st.session_state):
         fReset_states(df_prospects)
     
@@ -450,6 +543,7 @@ def main():
         if "calc_simul" in st.session_state:
             del st.session_state.calc_simul
     
+    # Affichage du cartouche d'entête
     st.header(f":inbox_tray: Dossiers à traiter : {df_prospects.loc[df_prospects['Etat'].isna()].shape[0]}")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -462,7 +556,8 @@ def main():
         st.subheader(f":dart: {df_prospects.loc[~df_prospects['Etat'].isna()].shape[0] / df_prospects.shape[0]:.0%} d'avancement")
     
     st.divider()
-    
+
+    # Menu de gestion des filtres    
     w_seuil_risque_min, w_seuil_risque_max = st.sidebar.slider("**Seuils de coloration du risque**", 0, 100, (8, 20))#, 
     st.session_state.w_seuil_risque = (w_seuil_risque_min, w_seuil_risque_max)
     
@@ -531,11 +626,15 @@ def main():
                                 key="w_nombre_prospects")
         st.sidebar.button("Réinitialisation des filtres", on_click=fReset_states, args=[df_prospects])
 
+    # Application des filtres
     df_wip = fReloadPage(df_prospects)
+    
+    # Affichage du tableau
     st.markdown(fPrintTable(df_wip.copy(), w_seuil_risque_min, w_seuil_risque_max), unsafe_allow_html=True)
     
     st.divider()
     
+    # Affichage des explication SHAP du dossier en cours    
     if ("id" in st.session_state) & (int(st.session_state.id) > 0):
         shap_values = fGetRessources(os.path.join("data", "cleaned", "shap_values.pkl"))[...,1]
         shap.initjs()
