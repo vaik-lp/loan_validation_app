@@ -44,47 +44,47 @@ def risk_simulation(genre: int = 0, eval_region: int = 1, ecart_adr: int = 0, ac
     
     
     try: 
-        if int(genre) not in [0, 1]:
+        if genre not in [0, 1]:
             current_message = "La donnée genre doit être 0 ou 1."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(eval_region) not in [1, 2, 3]:
+        elif eval_region not in [1, 2, 3]:
             current_message = "La donnée eval_region doit être entre 1 et 3."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
 
-        elif int(ecart_adr) not in [0, 1]:
+        elif ecart_adr not in [0, 1]:
             current_message = "La donnée ecart_adr doit être 0 ou 1."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(activite_pro) not in [0, 1]:
+        elif activite_pro not in [0, 1]:
             current_message = "La donnée activite_pro doit être 0 ou 1."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
 
-        elif int(scol_univ) not in [0, 1]:
+        elif scol_univ not in [0, 1]:
             current_message = "La donnée scol_univ doit être 0 ou 1."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(risque_all_loan) not in range(31):
+        elif risque_all_loan not in range(31):
             current_message = "La donnée risque_all_loan doit être entre 0 et 30."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(current_credit_cb) not in range(31):
+        elif current_credit_cb not in range(31):
             current_message = "La donnée current_credit_cb doit être 0 ou 30."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
             
-        elif int(nb_mens) not in range(31):
+        elif nb_mens not in range(31):
             current_message = "La donnée nb_mens doit être entre 0 et 30."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
 
-        elif int(nb_cb) not in range(31):
+        elif nb_cb not in range(31):
             current_message = "La donnée nb_cb doit être entre 0 et 30."
             if message == "" : message = current_message 
             else: message = " | ".join([message, current_message])
