@@ -32,6 +32,8 @@ class Test(unittest.TestCase):
         
 
     def test_valide_parameters(self):
+        print("test_valide_parameters ==> ", end="\r")
+        test_cpt = 0
         for genre in range(2):
             for eval_region in range(1, 4):
                 for ecart_adr in range(2):
@@ -45,7 +47,8 @@ class Test(unittest.TestCase):
                                                              activite_pro=activite_pro, scol_univ=scol_univ, 
                                                             risque_all_loan=risque_all_loan, current_credit_cb=current_credit_cb, 
                                                             nb_mens=nb_mens, nb_cb=nb_cb)
-
+                                            test_cpt += 1
+                                            print(f"test_valide_parameters ==> Avancement : {test_cpt/(2*3*2*2*2*30*30*30*30):.0%}", end="\r")
 
     #@unittest.expectedFailure
     def testBadParameters(self, genre: int = 2, eval_region: int = 0, ecart_adr: int = 2, activite_pro: int = 2, scol_univ: int = 2, 
@@ -60,6 +63,8 @@ class Test(unittest.TestCase):
 
     def test_invalide_parameters(self):
         
+        print("test_invalide_parameters ==> ", end="\r")
+        test_cpt = 0
         for genre in [-1, 0.5, 2]:
             for eval_region in [-1, 0, 1, 0.5, 5]:
                 for ecart_adr in [-1, 0, 0.5, 2]:
@@ -74,7 +79,10 @@ class Test(unittest.TestCase):
                                                             risque_all_loan=risque_all_loan, current_credit_cb=current_credit_cb, 
                                                             nb_mens=nb_mens, nb_cb=nb_cb)
 
+                                            test_cpt += 1
+                                            print(f"test_invalide_parameters ==> Avancement : {test_cpt/(3*5*4*4*4*4*4*4*4):.0%}", end="\r")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
+
