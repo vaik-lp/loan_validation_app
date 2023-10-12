@@ -1,10 +1,4 @@
 """Classe de test pour le fichier risk_simulation.py"""
-#import os
-#import pandas as pd
-#import numpy as np
-#import pickle
-#from fastapi import FastAPI
-#from xgboost import XGBClassifier
 
 import unittest
 
