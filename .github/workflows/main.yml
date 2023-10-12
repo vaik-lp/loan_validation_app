@@ -36,3 +36,12 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           #TARGET: ${{ secrets.TARGET_DIR }}
           EXCLUDE: ".github/, .venv/, /__pycache__/, aws/"
+          SCRIPT_BEFORE: |
+            whoami
+            ls -al
+          SCRIPT_AFTER: |
+            whoami
+            ls -al
+            echo $RSYNC_STDOUT
+            python3 -m streamlit run Home.py --server.fileWatcherType none
+            python3 -m uvicorn risk_simulation:app
