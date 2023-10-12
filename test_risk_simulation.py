@@ -42,7 +42,7 @@ class Test(unittest.TestCase):
                                                             risque_all_loan=risque_all_loan, current_credit_cb=current_credit_cb, 
                                                             nb_mens=nb_mens, nb_cb=nb_cb)
                                             test_cpt += 1
-                                            print(f"test_valide_parameters ==> Avancement : {test_cpt/(2*3*2*2*2*30*30*30*30):.0%}", end="\r")
+                                            #print(f"test_valide_parameters ==> Avancement : {test_cpt/(2*3*2*2*2*30*30*30*30):.0%}", end="\r")
 
     #@unittest.expectedFailure
     def testBadParameters(self, genre: int = 2, eval_region: int = 0, ecart_adr: int = 2, activite_pro: int = 2, scol_univ: int = 2, 
@@ -74,7 +74,7 @@ class Test(unittest.TestCase):
                                                             nb_mens=nb_mens, nb_cb=nb_cb)
 
                                             test_cpt += 1
-                                            print(f"test_invalide_parameters ==> Avancement : {test_cpt/(3*5*4*4*4*4*4*4*4):.0%}", end="\r")
+                                            #print(f"test_invalide_parameters ==> Avancement : {test_cpt/(3*5*4*4*4*4*4*4*4):.0%}", end="\r")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
