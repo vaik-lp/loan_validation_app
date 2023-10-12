@@ -9,7 +9,6 @@ import pickle
 import shap
 import matplotlib.pyplot as plt
 
-
 @st.cache_data
 def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
     """
@@ -542,7 +541,7 @@ def main():
         del st.session_state.simul
         if "calc_simul" in st.session_state:
             del st.session_state.calc_simul
-    
+            
     # Affichage du cartouche d'entête
     st.header(f":inbox_tray: Dossiers à traiter : {df_prospects.loc[df_prospects['Etat'].isna()].shape[0]}")
     col1, col2, col3 = st.columns(3)
@@ -557,7 +556,8 @@ def main():
     
     st.divider()
 
-    # Menu de gestion des filtres    
+	# Menu de gestion des filtres    
+    # Seuils du risque
     w_seuil_risque_min, w_seuil_risque_max = st.sidebar.slider("**Seuils de coloration du risque**", 0, 100, (8, 20))#, 
     st.session_state.w_seuil_risque = (w_seuil_risque_min, w_seuil_risque_max)
     
@@ -575,6 +575,17 @@ def main():
         if st.session_state.w_dossier_unique == True:
             st.session_state.w_dossier_unique = False
             fReset_states(df_prospects, reset_id=True)
+            
+
+        if (("w_risque_all_loan" in st.session_state) & ("w_nb_mens" in st.session_state) & ("w_nb_cb" in st.session_state) & 
+            ("w_risque_calc" in st.session_state)):
+            if ((len(st.session_state.w_risque_all_loan) != 2) | (len(st.session_state.w_nb_mens) != 2) | 
+                (len(st.session_state.w_nb_cb) != 2) |  (len(st.session_state.w_risque_calc) != 2)):
+                fReset_states(df_prospects, reset_id=False)
+        else:
+            fReset_states(df_prospects, reset_id=False)
+
+#        st.write(st.session_state)
         
         list_choice_genre = ["Homme", "Femme", "Tous"]
         
@@ -582,10 +593,12 @@ def main():
                         on_change=fReloadPage, args=[df_prospects], 
                         key="w_genre")
 
+        # Evaluation de la région d'habitation
         st.sidebar.multiselect("**Evaluation de la région d'habitation**", set(df_prospects["Evaluation de la région d'habitation"].astype(int)), 
                             on_change=fReloadPage, args=[df_prospects], 
                             key="w_eval_reg")
 
+		# Ecart adresse pro/perso
         list_choice_not = ["Non", "Oui", "Tous"]
         st.sidebar.radio("**Ecart adresse pro/perso**", list_choice_not, horizontal=True, 
                         on_change=fReloadPage, args=[df_prospects], 
@@ -611,6 +624,8 @@ def main():
                         min(df_prospects["Nombre de mensualitées"]), max(df_prospects["Nombre de mensualitées"]),
                         on_change=fReloadPage, args=[df_prospects], 
                         key="w_nb_mens")
+
+		# Nombre de CB pour retrait
         st.sidebar.slider("**Nombre de CB pour retrait**", 
                         min(df_prospects["Nombre de CB pour retrait"]), max(df_prospects["Nombre de CB pour retrait"]),
                         on_change=fReloadPage, args=[df_prospects], 
