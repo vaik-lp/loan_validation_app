@@ -20,3 +20,4 @@ SQLAlchemy
 shap
 mlflow==2.7.1
 evidently
+xgboost
