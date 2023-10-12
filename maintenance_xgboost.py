@@ -31,10 +31,60 @@ from mlflow.sklearn import log_model
 from mlflow.xgboost import log_model
 from mlflow.lightgbm import log_model
 from mlflow.client import MlflowClient
+import mlflow.pyfunc
 
 from pathlib import Path
 
 
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.metric_preset import DataDriftPreset, TargetDriftPreset, DataQualityPreset, RegressionPreset, ClassificationPreset
+from evidently.metrics import *
+
+from evidently.test_suite import TestSuite
+from evidently.tests.base_test import generate_column_tests
+from evidently.test_preset import DataStabilityTestPreset, NoTargetPerformanceTestPreset, RegressionTestPreset
+from evidently.tests import *
+
+
+# Soulignement du texte
+def fSouligneTitle(title, decalage = 0):
+    souligne = ''
+    for i in range(decalage):
+        souligne = souligne + ' '
+    
+    len_title = max([len(x.strip()) for x in title.split("\n")])
+    for i in range(len_title):
+        souligne = souligne + '-'
+
+    return souligne
+
+
+# Imprime un texte souligné
+def fPrintTitleSouligne(title, decalage = 0):
+    line = ''
+    for i in range(decalage):
+        line = line + ' '
+
+    line = line + title
+    print(line)
+    print(fSouligneTitle(title, decalage))
+
+
+# Imprime un texte 
+def fPrintTitle(title, decalage = 0, souligne=False):
+    line = ''
+    for i in range(decalage):
+        line = line + ' '
+
+    line = line + title
+    print(line)
+    if souligne:
+        print(fSouligneTitle(title, decalage))
+        
+        
 def fReadDataFrameFile(path, file, use_dict=False, encoding='utf8', sep=';'):
     """
     Fonction permettant la lecture d'un fichier au format csv encodé en utf8 contenant un DataFrame avec ou sans précision des types de données
@@ -372,7 +422,9 @@ def Exploration():
                                                                        test_size=0.25, 
                                                                        random_state=72
                                                                        )
-   
+
+    list_of_best_features = list(X_train)
+    
     #Paramètres par modele sur lesquels itérer
     list_tests = { 
         "LogisticRegression": [{"max_iter": 1000, "random_state": 72},
@@ -433,8 +485,14 @@ def Exploration():
                 model = LGBMClassifier(**params)
             elif model_name == "XGBClassifier":
                 model = XGBClassifier(**params)
+                list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
+                         'app_NAME_EDUCATION_TYPE_Higher education', 'agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum', 
+                         'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
+                         'agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique']
             
-            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, X_train, X_valid, y_train, y_valid, scorer="custom", best_score=best_score)
+            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, 
+                                              X_train[list_of_best_features], X_valid[list_of_best_features], 
+                                              y_train, y_valid, scorer="custom", best_score=best_score)
             compteur += 1
 
 def Validation():
@@ -492,7 +550,8 @@ def Validation():
                                                                        random_state=seed
                                                                        )
 
-                
+            list_of_best_features = list(X_train)
+
             if model_name == "LogisticRegression":
                 model = LogisticRegression(**params)
             elif model_name == "RandomForestClassifier":
@@ -503,8 +562,15 @@ def Validation():
                 model = LGBMClassifier(**params)
             elif model_name == "XGBClassifier":
                 model = XGBClassifier(**params)
+                list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
+                         'app_NAME_EDUCATION_TYPE_Higher education', 'agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum', 
+                         'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
+                         'agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique']
+                
             
-            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, X_train, X_valid, y_train, y_valid, scorer="custom", best_score=best_score)
+            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, 
+                                              X_train[list_of_best_features], X_valid[list_of_best_features], 
+                                              y_train, y_valid, scorer="custom", best_score=best_score)
             compteur += 1
 
 def Maintenance(ratio, campagne):
@@ -541,6 +607,8 @@ def Maintenance(ratio, campagne):
                                                                        random_state=72
                                                                        )
 
+    list_of_best_features = list(X_train)
+    
     list_tests = {"XGBClassifier": [
         {'booster': 'dart', 'eta': 0.5, 'gamma': 0, 'max_depth': 6, 'min_child_weight': 0, 'max_delta_step': 3, 'lambda': 0.55, 'alpha': 0.0001, 'num_parallel_tree': 1, 'verbosity': 0, 'subsample': 0.8}]
         }
@@ -569,19 +637,80 @@ def Maintenance(ratio, campagne):
                 model = LGBMClassifier(**params)
             elif model_name == "XGBClassifier":
                 model = XGBClassifier(**params)
+                list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
+                         'app_NAME_EDUCATION_TYPE_Higher education', 'agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum', 
+                         'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
+                         'agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique']
+
             
-            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, X_train, X_valid, y_train, y_valid, scorer="custom", best_score=best_score)
+            best_score = fRunTrainValideModel(model, experiment_label, experiment_tags, 
+                                              X_train[list_of_best_features], X_valid[list_of_best_features], 
+                                              y_train, y_valid, scorer="custom", best_score=best_score)
             compteur += 1
-      
+
+
+def TrackingDataDrift(model_name, model_version):
+    """ Suivre les données pour monitorer la présence de DataDrift
+    
+    Args:
+        model_name (str): Nom associé à la clé des paramètres
+        model_version (int): Version du modèle à utiliser
+    """
+
+    print("Lancement du script.")
+    print("Chargement des données.")
+    
+    list_of_best_features = ['app_IS_MASCULIN', 'app_REGION_RATING_CLIENT', 'app_REG_CITY_NOT_WORK_CITY', 'app_NAME_INCOME_TYPE_Working', 
+                         'app_NAME_EDUCATION_TYPE_Higher education', 'agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum', 
+                         'agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique', 'agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique', 
+                         'agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique', 'TARGET']
+        
+    X_train, X_valid, y_train, y_valid = fGetDataSets(os.path.join("data", "cleaned"), 
+                                                                       'features_03', 
+                                                                       use_dict=True, 
+                                                                       encoding='utf8', 
+                                                                       sep=';', 
+                                                                       features_index="SK_ID_CURR",
+                                                                       features_to_keep=list_of_best_features,
+                                                                       features_target_label='TARGET', 
+                                                                       features_target_values=[0, 1],
+                                                                       ratio_sampling=0.8, 
+                                                                       test_size=0.25,
+                                                                       random_state=72
+                                                                       )
+
+    print("Chargement du modèle.")
+    set_tracking_uri("http://127.0.0.1:5000")
+    model = mlflow.pyfunc.load_model(model_uri=f"models:/{model_name}/{model_version}")
+
+    print("Calcul des prédictions.")
+    X_train['prediction'] = model.predict(X_train)
+    X_valid['prediction'] = model.predict(X_valid)
+    
+    X_train['target'] = y_train
+    X_valid['target'] = y_valid
+    
+    print("Génération du rapport.")
+    report = Report(metrics=[
+        DataDriftPreset(), 
+                             ])
+    
+    report.run(reference_data=X_train.reset_index(drop=True), current_data=X_valid.reset_index(drop=True))
+    report.save_html(f"TrackingDataDriftReport/TrackingDataDriftReport_{datetime.now().strftime('%Y%m%d-%H%M%S')}.html")
+
+def fPrintAppInfo():
+    print( "Loan Validation App" )
+    print( "\tusage: python3 maintenance_xgboost.py <intValue>" )
+    print( "\tArgs => 1 for Exploration, 2 for Validation, 3 for Maintenance and 4 for DataDrift." )
+
             
 def main():
     
-    if len( sys.argv ) != 2:
-        print( "Loan Validation App" )
-        print( "\tusage: python3 maintenance_xgboost.py intValue" )
-        print( "Args => 1 for Exploration, 2 for Validation and 3 for Maintenance." )
+    
+    if len(sys.argv) > 2:
+        fPrintAppInfo()
     else:
-        strParam = sys.argv[2]
+        strParam = sys.argv[1]
         try:
             param = int(strParam)
             
@@ -597,11 +726,18 @@ def main():
                 for campagne, ratio in enumerate([0.4, 0.6, 0.8]):
                     print(f"Campagne {campagne+1:02d}")
                     Maintenance(ratio, campagne+1)
+            elif param == 4 :            
+                print("DataDrift")
+                model_name = "XGBClassifier_9edd93d27ceb9b03b57282a0dbc681f1"
+                model_version = 9
+                TrackingDataDrift(model_name, model_version)
+            
             else:
                 raise(ValueError)
                     
         except ValueError: 
-            print( "Bad parameter value: %s" % strParam, file=sys.stderr )
+            fPrintAppInfo()
+            print( "\tBad parameter value: %s" % strParam, file=sys.stderr )
 
 
 if __name__ == '__main__':
