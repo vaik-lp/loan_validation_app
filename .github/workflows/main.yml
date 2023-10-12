@@ -3,7 +3,7 @@ name: loan_validation_app CI/CD
 on: [push]
 
 jobs:
-  build:
+  build, testing & deploy:
 
     runs-on: ubuntu-22.04
 
