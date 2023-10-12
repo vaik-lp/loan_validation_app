@@ -11,8 +11,6 @@ import requests
 
 REST_URL = "http://localhost:8000/"
 
-
-
 def fCreateDataBase(url_db):
     """Chargement et mise en cache de la base de donnée popur ne la charger qu'une seule fois
 
@@ -202,7 +200,7 @@ st.write(" ")
 col4, col5 = st.columns(2)
 # création bouton
 with col4:
-    st.button(":arrows_counterclockwise: Lancer la simulation", key="calc_simul")
+    st.button(":arrows_counterclockwise: Lancer la simulation en local", key="calc_simul")
     resultat = st.button(":arrows_counterclockwise: Lancer la simulation en ligne")
     if resultat:
         fRender_message_score()
