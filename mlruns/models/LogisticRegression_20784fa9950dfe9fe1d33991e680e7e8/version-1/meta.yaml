@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1695767704387
+current_stage: None
+description: ''
+last_updated_timestamp: 1695767704387
+name: LogisticRegression_20784fa9950dfe9fe1d33991e680e7e8
+run_id: 8c4a61fbfd604eecbb6058d5749060e4
+run_link: ''
+source: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/8c4a61fbfd604eecbb6058d5749060e4/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 1

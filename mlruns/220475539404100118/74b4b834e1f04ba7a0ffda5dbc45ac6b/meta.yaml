@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/74b4b834e1f04ba7a0ffda5dbc45ac6b/artifacts
+end_time: 1695779526465
+entry_point_name: ''
+experiment_id: '220475539404100118'
+lifecycle_stage: active
+run_id: 74b4b834e1f04ba7a0ffda5dbc45ac6b
+run_name: chill-bug-429
+run_uuid: 74b4b834e1f04ba7a0ffda5dbc45ac6b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1695778101355
+status: 3
+tags: []
+user_id: petx698

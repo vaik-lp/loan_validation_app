@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1695782436189
+current_stage: None
+description: ''
+last_updated_timestamp: 1695782436189
+name: XGBClassifier_45f07380bed2bbfa61f73f70b07aa7d9
+run_id: 6f2062b179a642b7b22396797b8da76c
+run_link: ''
+source: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/6f2062b179a642b7b22396797b8da76c/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 1

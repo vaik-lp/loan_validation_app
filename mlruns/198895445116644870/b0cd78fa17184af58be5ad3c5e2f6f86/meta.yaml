@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/b0cd78fa17184af58be5ad3c5e2f6f86/artifacts
+end_time: 1695972556400
+entry_point_name: ''
+experiment_id: '198895445116644870'
+lifecycle_stage: active
+run_id: b0cd78fa17184af58be5ad3c5e2f6f86
+run_name: masked-wasp-340
+run_uuid: b0cd78fa17184af58be5ad3c5e2f6f86
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1695970249488
+status: 3
+tags: []
+user_id: petx698

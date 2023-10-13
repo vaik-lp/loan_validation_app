@@ -1,0 +1,29 @@
+artifact_path: model
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.0.0
+    model_class: xgboost.sklearn.XGBClassifier
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.11.2
+mlflow_version: 2.7.1
+model_uuid: 65663cbd63444e5292e322495bd04a7d
+run_id: 0db9f9843c014c7f8d534c1b65562c17
+signature:
+  inputs: '[{"type": "double", "name": "app_IS_MASCULIN"}, {"type": "double", "name":
+    "app_REGION_RATING_CLIENT"}, {"type": "double", "name": "app_REG_CITY_NOT_WORK_CITY"},
+    {"type": "double", "name": "app_NAME_INCOME_TYPE_Working"}, {"type": "double",
+    "name": "app_NAME_EDUCATION_TYPE_Higher education"}, {"type": "double", "name":
+    "agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum"}, {"type": "double", "name":
+    "agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique"}, {"type": "double", "name":
+    "agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique"}, {"type": "double", "name":
+    "agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int32", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2023-10-09 23:00:37.126332'

@@ -1,0 +1,9 @@
+digest: d21328d6
+name: dataset
+profile: '{"features_shape": [305299, 69], "features_size": 21065631, "features_nbytes":
+  84262524}'
+schema: '{"mlflow_tensorspec": {"features": "[{\"type\": \"tensor\", \"tensor-spec\":
+  {\"dtype\": \"float32\", \"shape\": [-1, 69]}}]", "targets": null}}'
+source: '{"tags": {"mlflow.user": "petx698", "mlflow.source.name": "maintenance_xgboost.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "013bf5f28c5fb16556dbb7515146a15c5bee8d33"}}'
+source_type: code

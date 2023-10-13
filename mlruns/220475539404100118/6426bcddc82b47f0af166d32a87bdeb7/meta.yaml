@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/6426bcddc82b47f0af166d32a87bdeb7/artifacts
+end_time: 1695783865034
+entry_point_name: ''
+experiment_id: '220475539404100118'
+lifecycle_stage: active
+run_id: 6426bcddc82b47f0af166d32a87bdeb7
+run_name: masked-horse-305
+run_uuid: 6426bcddc82b47f0af166d32a87bdeb7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1695782436486
+status: 3
+tags: []
+user_id: petx698

@@ -1,0 +1,10 @@
+digest: eb93fd05
+name: dataset
+profile: '{"features_shape": [228975, 69], "features_size": 15799275, "features_nbytes":
+  63197100}'
+schema: '{"mlflow_tensorspec": {"features": "[{\"type\": \"tensor\", \"tensor-spec\":
+  {\"dtype\": \"float32\", \"shape\": [-1, 69]}}]", "targets": null}}'
+source: '{"tags": {"mlflow.user": "petx698", "mlflow.source.name": "c:\\Users\\petx698\\OneDrive
+  - LA POSTE GROUPE\\Documents\\MyDev\\Python\\Projets\\ocr\\ocr-ds-projet7\\maintenance_xgboost.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "013bf5f28c5fb16556dbb7515146a15c5bee8d33"}}'
+source_type: code

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/77c21f986579486584af0d49dd5ae19e/artifacts
+end_time: 1695792435485
+entry_point_name: ''
+experiment_id: '220475539404100118'
+lifecycle_stage: active
+run_id: 77c21f986579486584af0d49dd5ae19e
+run_name: gaudy-sloth-153
+run_uuid: 77c21f986579486584af0d49dd5ae19e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1695790988263
+status: 3
+tags: []
+user_id: petx698

@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1695776823097
+current_stage: None
+description: ''
+last_updated_timestamp: 1695776823097
+name: LGBMClassifier_b469723606b879235cd8a76fc10f7b18
+run_id: 3fff2b07ab294e19b6a0def7cdd3af23
+run_link: ''
+source: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/3fff2b07ab294e19b6a0def7cdd3af23/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 1

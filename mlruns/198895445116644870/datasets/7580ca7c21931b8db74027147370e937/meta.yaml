@@ -1,0 +1,64 @@
+digest: a75f8b7d
+name: dataset
+profile: '{"num_rows": 25442, "num_elements": 1755498}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "app_IS_MASCULIN"}, {"type":
+  "double", "name": "app_DAYS_BIRTH"}, {"type": "double", "name": "app_DAYS_EMPLOYED"},
+  {"type": "double", "name": "app_DAYS_ID_PUBLISH"}, {"type": "double", "name": "app_REGION_RATING_CLIENT"},
+  {"type": "double", "name": "app_REG_CITY_NOT_WORK_CITY"}, {"type": "double", "name":
+  "app_EXT_SOURCE_1"}, {"type": "double", "name": "app_EXT_SOURCE_2"}, {"type": "double",
+  "name": "app_EXT_SOURCE_3"}, {"type": "double", "name": "app_DAYS_LAST_PHONE_CHANGE"},
+  {"type": "double", "name": "app_NAME_INCOME_TYPE_Working"}, {"type": "double", "name":
+  "app_NAME_EDUCATION_TYPE_Higher education"}, {"type": "double", "name": "pol_EXT_SOURCE_1
+  EXT_SOURCE_2"}, {"type": "double", "name": "pol_EXT_SOURCE_1 EXT_SOURCE_3"}, {"type":
+  "double", "name": "pol_EXT_SOURCE_2 EXT_SOURCE_3"}, {"type": "double", "name": "pol_EXT_SOURCE_2
+  DAYS_BIRTH"}, {"type": "double", "name": "pol_EXT_SOURCE_3 DAYS_BIRTH"}, {"type":
+  "double", "name": "pol_EXT_SOURCE_1 EXT_SOURCE_2 EXT_SOURCE_3"}, {"type": "double",
+  "name": "pol_EXT_SOURCE_1 EXT_SOURCE_2 DAYS_BIRTH"}, {"type": "double", "name":
+  "pol_EXT_SOURCE_1 EXT_SOURCE_3 DAYS_BIRTH"}, {"type": "double", "name": "pol_EXT_SOURCE_2
+  EXT_SOURCE_3 DAYS_BIRTH"}, {"type": "double", "name": "agg_client_bureau_CREDIT_TYPE_Microloan_sum_nunique"},
+  {"type": "double", "name": "agg_client_bureau_CREDIT_TYPE_Microloan_sum_var"}, {"type":
+  "double", "name": "agg_client_bureau_CREDIT_ACTIVE_Active_sum_mean"}, {"type": "double",
+  "name": "agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum"}, {"type": "double", "name":
+  "agg_client_bureau_DAYS_CREDIT_mean_mean"}, {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_mean_min"},
+  {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique"},
+  {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_ENDDATE_count_mean"},
+  {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_ENDDATE_count_var"}, {"type":
+  "double", "name": "agg_client_bureau_DAYS_ENDDATE_FACT_mean_mean"}, {"type": "double",
+  "name": "agg_client_bureau_DAYS_ENDDATE_FACT_mean_min"}, {"type": "double", "name":
+  "agg_client_bureau_DAYS_ENDDATE_FACT_sum_mean"}, {"type": "double", "name": "agg_client_bureau_DAYS_ENDDATE_FACT_sum_var"},
+  {"type": "double", "name": "agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique"},
+  {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_UPDATE_mean_mean"}, {"type":
+  "double", "name": "agg_client_bureau_DAYS_CREDIT_UPDATE_mean_min"}, {"type": "double",
+  "name": "agg_client_bureau_balance_bureau_balance_MONTHS_BALANCE_count_mean_mean"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_MONTHS_BALANCE_count_mean_max"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_MONTHS_BALANCE_mean_mean_min"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_MONTHS_BALANCE_sum_mean_sum"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_1_mean_mean_mean"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_1_mean_mean_max"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_1_mean_mean_sum"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_C_mean_mean_mean"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_C_sum_mean_mean"},
+  {"type": "double", "name": "agg_client_bureau_balance_bureau_balance_STATUS_C_sum_mean_max"},
+  {"type": "double", "name": "agg_client_cash_MONTHS_BALANCE_mean_min"}, {"type":
+  "double", "name": "agg_client_credit_NAME_CONTRACT_STATUS_Approved_mean_count"},
+  {"type": "double", "name": "agg_client_credit_MONTHS_BALANCE_max_sum"}, {"type":
+  "double", "name": "agg_client_credit_AMT_BALANCE_mean_mean"}, {"type": "double",
+  "name": "agg_client_credit_AMT_BALANCE_max_mean"}, {"type": "double", "name": "agg_client_credit_AMT_BALANCE_min_mean"},
+  {"type": "double", "name": "agg_client_credit_AMT_CREDIT_LIMIT_ACTUAL_max_sum"},
+  {"type": "double", "name": "agg_client_credit_AMT_CREDIT_LIMIT_ACTUAL_sum_sum"},
+  {"type": "double", "name": "agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique"},
+  {"type": "double", "name": "agg_client_credit_AMT_DRAWINGS_CURRENT_mean_mean"},
+  {"type": "double", "name": "agg_client_credit_AMT_DRAWINGS_CURRENT_max_mean"}, {"type":
+  "double", "name": "agg_client_credit_AMT_INST_MIN_REGULARITY_nunique_mean"}, {"type":
+  "double", "name": "agg_client_credit_CNT_DRAWINGS_ATM_CURRENT_nunique_mean"}, {"type":
+  "double", "name": "agg_client_credit_CNT_DRAWINGS_ATM_CURRENT_mean_sum"}, {"type":
+  "double", "name": "agg_client_credit_CNT_DRAWINGS_CURRENT_nunique_mean"}, {"type":
+  "double", "name": "agg_client_credit_CNT_DRAWINGS_CURRENT_mean_mean"}, {"type":
+  "double", "name": "agg_client_credit_CNT_DRAWINGS_CURRENT_mean_sum"}, {"type": "double",
+  "name": "agg_client_credit_CNT_DRAWINGS_CURRENT_max_mean"}, {"type": "double", "name":
+  "agg_client_credit_CNT_DRAWINGS_CURRENT_var_mean"}, {"type": "double", "name": "agg_client_credit_CNT_DRAWINGS_OTHER_CURRENT_nunique_mean"},
+  {"type": "double", "name": "agg_client_credit_CNT_DRAWINGS_POS_CURRENT_nunique_mean"},
+  {"type": "double", "name": "agg_client_installments_AMT_PAYMENT_min_sum"}]}'
+source: '{"tags": {"mlflow.user": "petx698", "mlflow.source.name": "maintenance_xgboost.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "013bf5f28c5fb16556dbb7515146a15c5bee8d33"}}'
+source_type: code

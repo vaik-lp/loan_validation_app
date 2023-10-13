@@ -1,0 +1,16 @@
+artifact_uri: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/9d26e324a61f4047a5eef6b2c75b0e16/artifacts
+deleted_time: 1695767560595
+end_time: 1695404083331
+entry_point_name: ''
+experiment_id: '220475539404100118'
+lifecycle_stage: deleted
+run_id: 9d26e324a61f4047a5eef6b2c75b0e16
+run_name: orderly-koi-99
+run_uuid: 9d26e324a61f4047a5eef6b2c75b0e16
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1695404035155
+status: 4
+tags: []
+user_id: petx698

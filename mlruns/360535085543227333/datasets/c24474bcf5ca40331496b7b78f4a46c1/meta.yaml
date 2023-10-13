@@ -1,0 +1,13 @@
+digest: ed9055e3
+name: dataset
+profile: '{"num_rows": 113074, "num_elements": 1017666}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "app_IS_MASCULIN"}, {"type":
+  "double", "name": "app_REGION_RATING_CLIENT"}, {"type": "double", "name": "app_REG_CITY_NOT_WORK_CITY"},
+  {"type": "double", "name": "app_NAME_INCOME_TYPE_Working"}, {"type": "double", "name":
+  "app_NAME_EDUCATION_TYPE_Higher education"}, {"type": "double", "name": "agg_client_bureau_CREDIT_ACTIVE_Active_sum_sum"},
+  {"type": "double", "name": "agg_client_bureau_DAYS_CREDIT_ENDDATE_count_nunique"},
+  {"type": "double", "name": "agg_client_bureau_AMT_CREDIT_SUM_DEBT_mean_nunique"},
+  {"type": "double", "name": "agg_client_credit_AMT_DRAWINGS_ATM_CURRENT_mean_nunique"}]}'
+source: '{"tags": {"mlflow.user": "petx698", "mlflow.source.name": "maintenance_xgboost.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "0a3aa4775f847a28f85e5ce9edd86fc13ced6634"}}'
+source_type: code

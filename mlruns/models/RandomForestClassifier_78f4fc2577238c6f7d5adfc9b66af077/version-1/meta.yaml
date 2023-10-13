@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1695769618738
+current_stage: None
+description: ''
+last_updated_timestamp: 1695769618738
+name: RandomForestClassifier_78f4fc2577238c6f7d5adfc9b66af077
+run_id: bc7fe22e55d24c59ac5dce18490429a7
+run_link: ''
+source: file:///C:/Users/petx698/OneDrive%20-%20LA%20POSTE%20GROUPE/Documents/MyDev/Python/Projets/ocr/ocr-ds-projet7/mlruns/bc7fe22e55d24c59ac5dce18490429a7/artifacts/model
+status: READY
+status_message: null
+user_id: null
+version: 1
