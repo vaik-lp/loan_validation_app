@@ -545,7 +545,7 @@ def Validation():
                                                                        features_index="SK_ID_CURR",
                                                                        features_target_label='TARGET', 
                                                                        features_target_values=[0, 1],
-                                                                       ratio_sampling=0.6, 
+                                                                       ratio_sampling=1.0, 
                                                                        test_size=0.25, 
                                                                        random_state=seed
                                                                        )
@@ -674,7 +674,7 @@ def TrackingDataDrift(model_name, model_version):
                                                                        features_to_keep=list_of_best_features,
                                                                        features_target_label='TARGET', 
                                                                        features_target_values=[0, 1],
-                                                                       ratio_sampling=0.8, 
+                                                                       ratio_sampling=1.0, 
                                                                        test_size=0.25,
                                                                        random_state=72
                                                                        )
